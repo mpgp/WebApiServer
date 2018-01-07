@@ -1,9 +1,9 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ValuesController.cs" company="mpgp">
+// <copyright file="AuthController.cs" company="mpgp">
 //   Multiplayer Game Platform
 // </copyright>
 // <summary>
-//   Defines the AuthModel type.
+//   Defines the AuthController type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -14,15 +14,15 @@ namespace WebApiServer.Controllers
 
     /// <inheritdoc />
     [Route("api/[controller]")]
-    public class ValuesController : Controller
+    public class AuthController : Controller
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ValuesController"/> class.
+        /// Initializes a new instance of the <see cref="AuthController"/> class.
         /// </summary>
         /// <param name="users">
         /// The users.
         /// </param>
-        public ValuesController(Database.Users users)
+        public AuthController(Database.Users users)
         {
             Users = users;
             Users.Add(new UserModel()
@@ -54,28 +54,11 @@ namespace WebApiServer.Controllers
         /// The <see cref="string"/>.
         /// </returns>
         [HttpPost]
-        public string Post([FromBody]AuthModel authData)
+        public int Post([FromBody]UserModel authData)
         {
-            return Users.Find(user => user.Login == authData.Login && user.Password == authData.Password) == null
-                       ? "ERROR"
-                       : "SUCCESS";
-        }
-
-        /// <summary>
-        /// The auth model.
-        /// TODO: Transfer this model to ./Models
-        /// </summary>
-        public class AuthModel
-        {
-            /// <summary>
-            /// Gets or sets the login.
-            /// </summary>
-            public string Login { get; set; }
-
-            /// <summary>
-            /// Gets or sets the password.
-            /// </summary>
-            public string Password { get; set; }
+            return Users.Find(user => user.Login == authData.Login && user.Password == authData.Password)
+                   ?.Id
+                   ?? 0;
         }
     }
 }
