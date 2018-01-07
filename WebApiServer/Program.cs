@@ -40,6 +40,9 @@ namespace WebApiServer
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
+#if !DEBUG
+                .UseUrls("http://0.0.0.0:80")
+#endif
                 .Build();
     }
 }
