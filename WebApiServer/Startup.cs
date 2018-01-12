@@ -43,7 +43,7 @@ namespace WebApiServer
         /// </param>
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton(typeof(Database.Users));
+            services.AddSingleton<Database.Users>();
             services.AddMvc();
         }
 

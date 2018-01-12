@@ -15,6 +15,25 @@ namespace WebApiServer.Models
     public class UserModel
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="UserModel"/> class.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <param name="login">
+        /// The login.
+        /// </param>
+        /// <param name="password">
+        /// The password.
+        /// </param>
+        public UserModel(int id, string login, string password)
+        {
+            Id = id;
+            Login = login;
+            Password = password;
+        }
+
+        /// <summary>
         /// Gets or sets the id.
         /// </summary>
         public int Id { get; set; }
