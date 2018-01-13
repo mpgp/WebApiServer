@@ -45,10 +45,17 @@ namespace WebApiServer.Controllers
         [HttpPost]
         public int Auth([FromBody]UserModel userData)
         {
-            System.Console.WriteLine(ModelState.IsValid ? "OK" : "FAIL");
-            System.Console.WriteLine(string.Join("; ", ModelState.Values
-                .SelectMany(x => x.Errors)
-                .Select(x => x.ErrorMessage)));
+            if (ModelState.IsValid)
+            {
+                System.Console.WriteLine("Model isn't valid! Errors:");
+                System.Console.WriteLine(string.Join("; ", ModelState.Values
+                    .SelectMany(x => x.Errors)
+                    .Select(x => x.ErrorMessage)));                
+            }
+            else
+            {
+                System.Console.WriteLine("Model is valid!");
+            }
             
             return Users.Find(userData)
                    ?.Id
@@ -67,7 +74,7 @@ namespace WebApiServer.Controllers
         [HttpPut]
         public int Register([FromBody]UserModel userData)
         {
-            if (Users.Find(userData) != null)
+            if (Users.UserExists(userData))
             {
                 return 0;
             }

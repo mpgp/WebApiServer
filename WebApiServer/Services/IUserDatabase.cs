@@ -8,5 +8,6 @@
         UserModel Find(UserModel userModel);
         UserModel Remove(UserModel userModel);
         UserModel Update(UserModel userModel);
+        bool UserExists(UserModel userModel);
     }
 }

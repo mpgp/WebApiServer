@@ -34,5 +34,10 @@
         {
             throw new System.NotImplementedException();
         }
+
+        public bool UserExists(UserModel userModel)
+        {
+            return Users.Find(user => user.Login == userModel.Login) != null;
+        }
     }
 }

@@ -49,5 +49,11 @@
         {
             throw new System.NotImplementedException();
         }
+
+        public bool UserExists(UserModel userModel)
+        {
+            var rows = DataTable.Select($"Login = '{userModel.Login}'");
+            return rows.Length > 0;
+        }
     }
 }
