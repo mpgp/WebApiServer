@@ -1,6 +1,7 @@
 ﻿namespace WebApiServer.Services
 {
     using System.Data;
+    using System.Linq;
     using Models;
     
     public class UserDatabaseFile : IUserDatabase
@@ -28,7 +29,15 @@
 
         public UserModel Find(UserModel userModel)
         {
-            return null;
+            var rows = DataTable.Select($"Login = '{userModel.Login}' AND Password = '{userModel.Password}'");
+            if (rows.Length == 0)
+            {
+                return null;
+            }
+            
+            var row = rows[0];
+            var model = new UserModel(int.Parse((string)row["Id"]), (string)row["Login"], (string)row["Password"]);
+            return model;
         }
 
         public UserModel Remove(UserModel userModel)
