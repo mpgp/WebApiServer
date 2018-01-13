@@ -45,7 +45,7 @@ namespace WebApiServer.Controllers
         [HttpPost]
         public int Auth([FromBody]UserModel userData)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 System.Console.WriteLine("Model isn't valid! Errors:");
                 System.Console.WriteLine(string.Join("; ", ModelState.Values

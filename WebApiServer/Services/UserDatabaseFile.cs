@@ -17,6 +17,7 @@
             DataTable.Columns.Add(new DataColumn("Login"));
             DataTable.Columns.Add(new DataColumn("Password"));
             DataSet.Tables.Add(DataTable);
+            DataSet.ReadXml(FilePath);
         }
         
         public UserModel Add(UserModel userModel)
