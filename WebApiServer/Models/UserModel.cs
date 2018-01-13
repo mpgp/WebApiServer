@@ -9,6 +9,8 @@
 
 namespace WebApiServer.Models
 {
+    using System.ComponentModel.DataAnnotations;
+    
     /// <summary>
     /// The user model.
     /// </summary>
@@ -41,11 +43,13 @@ namespace WebApiServer.Models
         /// <summary>
         /// Gets or sets the login.
         /// </summary>
+        [Required(ErrorMessage = "Login is required!")]
         public string Login { get; set; }
 
         /// <summary>
         /// Gets or sets the password.
         /// </summary>
+        [Required(ErrorMessage = "Password is required!")]
         public string Password { get; set; }
     }
 }

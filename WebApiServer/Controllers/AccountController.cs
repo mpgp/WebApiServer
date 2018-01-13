@@ -9,6 +9,7 @@
 
 namespace WebApiServer.Controllers
 {
+    using System.Linq;
     using Microsoft.AspNetCore.Mvc;
     using Models;
 
@@ -44,6 +45,11 @@ namespace WebApiServer.Controllers
         [HttpPost]
         public int Auth([FromBody]UserModel userData)
         {
+            System.Console.WriteLine(ModelState.IsValid ? "OK" : "FAIL");
+            System.Console.WriteLine(string.Join("; ", ModelState.Values
+                .SelectMany(x => x.Errors)
+                .Select(x => x.ErrorMessage)));
+            
             return Users.Find(user => user.Login == userData.Login && user.Password == userData.Password)
                    ?.Id
                    ?? 0;
