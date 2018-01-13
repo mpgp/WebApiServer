@@ -1,0 +1,18 @@
+<?xml version="1.0" standalone="yes"?>
+<Users>
+  <UserModel>
+    <Id>1</Id>
+    <Login>sdfsdfsdf</Login>
+    <Password>zzazaazza</Password>
+  </UserModel>
+  <UserModel>
+    <Id>2</Id>
+    <Login>user</Login>
+    <Password>qwerty</Password>
+  </UserModel>
+  <UserModel>
+    <Id>3</Id>
+    <Login>admin</Login>
+    <Password>123456</Password>
+  </UserModel>
+</Users>

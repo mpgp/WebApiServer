@@ -23,7 +23,7 @@ namespace WebApiServer.Controllers
         /// <param name="users">
         /// The users.
         /// </param>
-        public AccountController(Database.Users users)
+        public AccountController(Services.IUserDatabase users)
         {
             Users = users;
         }
@@ -31,7 +31,7 @@ namespace WebApiServer.Controllers
         /// <summary>
         /// The Users.
         /// </summary>
-        private Database.Users Users { get; }
+        private Services.IUserDatabase Users { get; }
 
         /// <summary>
         /// The auth.
@@ -50,7 +50,7 @@ namespace WebApiServer.Controllers
                 .SelectMany(x => x.Errors)
                 .Select(x => x.ErrorMessage)));
             
-            return Users.Find(user => user.Login == userData.Login && user.Password == userData.Password)
+            return Users.Find(userData)
                    ?.Id
                    ?? 0;
         }
@@ -67,14 +67,12 @@ namespace WebApiServer.Controllers
         [HttpPut]
         public int Register([FromBody]UserModel userData)
         {
-            if (Users.Find(user => user.Login == userData.Login) != null)
+            if (Users.Find(userData) != null)
             {
-                return -1;
+                return 0;
             }
 
-            var newUser = new UserModel(Users.Count + 1, userData.Login, userData.Password);
-            Users.Add(newUser);
-            return newUser.Id;
+            return Users.Add(userData).Id;
         }
     }
 }
