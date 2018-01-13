@@ -26,6 +26,7 @@
         public UserModel Add(UserModel userModel)
         {
             userModel.Id = DataTable.Rows.Count + 1;
+            userModel.Password = Utils.HashProvider.Get(userModel.Password);
             DataTable.Rows.Add(userModel.Id, userModel.Login, userModel.Password);
             DataSet.WriteXml(FilePath);
             return userModel;
@@ -33,7 +34,9 @@
 
         public UserModel Find(UserModel userModel)
         {
-            var rows = DataTable.Select($"Login = '{userModel.Login}' AND Password = '{userModel.Password}'");
+            var rows = DataTable.Select(
+                $"Login = '{userModel.Login}' AND Password = '{Utils.HashProvider.Get(userModel.Password)}'");
+            
             if (rows.Length == 0)
             {
                 return null;
