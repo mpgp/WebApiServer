@@ -2,6 +2,7 @@
 {
     using Models;
     
+    // ReSharper disable once UnusedMember.Global
     public class UserDatabaseMemory : IUserDatabase
     {
         private System.Collections.Generic.List<UserModel> Users { get; }

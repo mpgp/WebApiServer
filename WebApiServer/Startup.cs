@@ -17,6 +17,7 @@ namespace WebApiServer
     /// <summary>
     /// The startup.
     /// </summary>
+    // ReSharper disable once ClassNeverInstantiated.Global
     public class Startup
     {
         /// <summary>
@@ -33,6 +34,8 @@ namespace WebApiServer
         /// <summary>
         /// Gets the configuration.
         /// </summary>
+        // ReSharper disable once MemberCanBePrivate.Global
+        // ReSharper disable once UnusedAutoPropertyAccessor.Global
         public IConfiguration Configuration { get; }
 
         /// <summary>
@@ -43,7 +46,11 @@ namespace WebApiServer
         /// </param>
         public void ConfigureServices(IServiceCollection services)
         {
+#if DEBUG
+            services.AddSingleton<Services.IUserDatabase, Services.UserDatabaseMemory>();
+#else
             services.AddSingleton<Services.IUserDatabase, Services.UserDatabaseFile>();
+#endif
             services.AddMvc();
         }
 
@@ -56,6 +63,7 @@ namespace WebApiServer
         /// <param name="env">
         /// The env.
         /// </param>
+        // ReSharper disable once UnusedMember.Global
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.UseDefaultFiles();

@@ -1,9 +1,9 @@
 ﻿namespace WebApiServer.Services
 {
     using System.Data;
-    using System.Linq;
     using Models;
     
+    // ReSharper disable once ClassNeverInstantiated.Global
     public class UserDatabaseFile : IUserDatabase
     {
         private string FilePath { get; }
