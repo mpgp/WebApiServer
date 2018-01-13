@@ -12,12 +12,15 @@
         
         public UserDatabaseFile()
         {
-            FilePath = "App_Data/Users.xml";
+            FilePath = System.IO.Path.Combine("App_Data", "Users.xml");
             DataTable.Columns.Add(new DataColumn("Id"));
             DataTable.Columns.Add(new DataColumn("Login"));
             DataTable.Columns.Add(new DataColumn("Password"));
             DataSet.Tables.Add(DataTable);
-            DataSet.ReadXml(FilePath);
+            if (System.IO.File.Exists(FilePath))
+            {
+                DataSet.ReadXml(FilePath);   
+            }
         }
         
         public UserModel Add(UserModel userModel)
