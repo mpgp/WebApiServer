@@ -20,18 +20,18 @@ namespace WebApiServer.Controllers
         /// <summary>
         /// Initializes a new instance of the <see cref="AccountController"/> class.
         /// </summary>
-        /// <param name="users">
+        /// <param name="db">
         /// The users.
         /// </param>
-        public AccountController(Services.IUserDatabase users)
+        public AccountController(ApiContext db)
         {
-            Users = users;
+            Db = db;
         }
 
         /// <summary>
-        /// The Users.
+        /// Gets the users.
         /// </summary>
-        private Services.IUserDatabase Users { get; }
+        private ApiContext Db { get; }
 
         /// <summary>
         /// The auth.
@@ -48,18 +48,14 @@ namespace WebApiServer.Controllers
             if (!ModelState.IsValid)
             {
                 System.Console.WriteLine("Model isn't valid! Errors:");
-                System.Console.WriteLine(string.Join("; ", ModelState.Values
-                    .SelectMany(x => x.Errors)
-                    .Select(x => x.ErrorMessage)));                
+                System.Console.WriteLine(string.Join("; ", ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage)));                
             }
             else
             {
                 System.Console.WriteLine("Model is valid!");
             }
             
-            return Users.Find(userData)
-                   ?.Id
-                   ?? 0;
+            return 0;
         }
 
         /// <summary>
@@ -74,12 +70,7 @@ namespace WebApiServer.Controllers
         [HttpPut]
         public int Register([FromBody]UserModel userData)
         {
-            if (Users.UserExists(userData))
-            {
-                return 0;
-            }
-
-            return Users.Add(userData).Id;
+            return 0;
         }
     }
 }

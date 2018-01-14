@@ -11,6 +11,7 @@ namespace WebApiServer
 {
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
 
@@ -46,6 +47,8 @@ namespace WebApiServer
         /// </param>
         public void ConfigureServices(IServiceCollection services)
         {
+            string connection = Configuration.GetConnectionString("DefaultConnection");
+            services.AddDbContext<Models.ApiContext>(options => options.UseSqlServer(connection));
 #if DEBUG
             services.AddSingleton<Services.IUserDatabase, Services.UserDatabaseMemory>();
 #else
