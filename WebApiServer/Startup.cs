@@ -49,11 +49,6 @@ namespace WebApiServer
         {
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<Models.ApiContext>(options => options.UseSqlServer(connection));
-#if DEBUG
-            services.AddSingleton<Services.IUserDatabase, Services.UserDatabaseMemory>();
-#else
-            services.AddSingleton<Services.IUserDatabase, Services.UserDatabaseFile>();
-#endif
             services.AddMvc();
         }
 

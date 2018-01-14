@@ -51,6 +51,13 @@ namespace WebApiServer.Models
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="UserModel"/> class.
+        /// </summary>
+        public UserModel()
+        {
+        }
+
+        /// <summary>
         /// Gets or sets the id.
         /// </summary>
         public int Id { get; set; }

@@ -40,7 +40,7 @@ namespace WebApiServer.Controllers
         /// The user data.
         /// </param>
         /// <returns>
-        /// The <see cref="string"/>.
+        /// The <see cref="int"/>.
         /// </returns>
         [HttpPost]
         public int Auth([FromBody]UserModel userData)
@@ -54,8 +54,11 @@ namespace WebApiServer.Controllers
             {
                 System.Console.WriteLine("Model is valid!");
             }
-            
-            return 0;
+
+            var foundUser = Db.Users.FirstOrDefault(
+                user => user.Login == userData.Login && user.Password == Utils.HashProvider.Get(userData.Password));
+
+            return foundUser?.Id ?? 0;
         }
 
         /// <summary>
@@ -70,7 +73,27 @@ namespace WebApiServer.Controllers
         [HttpPut]
         public int Register([FromBody]UserModel userData)
         {
-            return 0;
+            if (!ModelState.IsValid)
+            {
+                System.Console.WriteLine("Model isn't valid! Errors:");
+                System.Console.WriteLine(string.Join("; ", ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage)));
+            }
+            else
+            {
+                System.Console.WriteLine("Model is valid!");
+            }
+
+            var foundUser = Db.Users.FirstOrDefault(user => user.Login == userData.Login);
+            if (foundUser != null)
+            {
+                return 0;
+            }
+
+            userData.Password = Utils.HashProvider.Get(userData.Password);
+            var newUser = Db.Users.Add(userData).Entity;
+            Db.SaveChanges();
+
+            return newUser?.Id ?? 0;
         }
     }
 }
