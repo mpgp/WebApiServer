@@ -21,6 +21,8 @@ bld/
 [Bb]in/
 [Oo]bj/
 [Ll]og/
+WebApiServer/appsettings.Development.json
+WebApiServer/appsettings.json
 
 # Visual Studio 2015 cache/options directory
 .vs/
@@ -39,7 +41,6 @@ TestResult.xml
 [Dd]ebugPS/
 [Rr]eleasePS/
 dlldata.c
-WebApiServer/App_Data/Users.xml
 
 # DNX
 project.lock.json
