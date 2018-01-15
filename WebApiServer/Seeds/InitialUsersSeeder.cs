@@ -7,15 +7,6 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="InitialUsersSeeder.cs" company="mpgp">
-//   Multiplayer Game Platform
-// </copyright>
-// <summary>
-//   Defines the InitialUsersSeeder type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 namespace WebApiServer.Seeds
 {
     using System.Linq;
@@ -37,8 +28,8 @@ namespace WebApiServer.Seeds
             if (!context.Users.Any())
             {
                 context.Users.AddRange(
-                    new UserModel("loktionov129", "43b778bf33164eb9a09b278aaef2c783"),
-                    new UserModel("Scorpio92", "0b537c6d4cb2f679641b853e92c63dfc"));
+                    new UserModel("Loktionov129", "941bdee79a796bfc6778eb35478e34f6"),
+                    new UserModel("Scorpio92", "0596df50d7e110a71da2f53d21ff3669"));
                 context.SaveChanges();
             }
         }
