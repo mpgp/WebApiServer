@@ -20,18 +20,18 @@ namespace WebApiServer.Controllers
         /// <summary>
         /// Initializes a new instance of the <see cref="AccountController"/> class.
         /// </summary>
-        /// <param name="users">
+        /// <param name="db">
         /// The users.
         /// </param>
-        public AccountController(Services.IUserDatabase users)
+        public AccountController(ApiContext db)
         {
-            Users = users;
+            Db = db;
         }
 
         /// <summary>
-        /// The Users.
+        /// Gets the users.
         /// </summary>
-        private Services.IUserDatabase Users { get; }
+        private ApiContext Db { get; }
 
         /// <summary>
         /// The auth.
@@ -40,7 +40,7 @@ namespace WebApiServer.Controllers
         /// The user data.
         /// </param>
         /// <returns>
-        /// The <see cref="string"/>.
+        /// The <see cref="int"/>.
         /// </returns>
         [HttpPost]
         public int Auth([FromBody]UserModel userData)
@@ -48,18 +48,17 @@ namespace WebApiServer.Controllers
             if (!ModelState.IsValid)
             {
                 System.Console.WriteLine("Model isn't valid! Errors:");
-                System.Console.WriteLine(string.Join("; ", ModelState.Values
-                    .SelectMany(x => x.Errors)
-                    .Select(x => x.ErrorMessage)));                
+                System.Console.WriteLine(string.Join("; ", ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage)));                
             }
             else
             {
                 System.Console.WriteLine("Model is valid!");
             }
-            
-            return Users.Find(userData)
-                   ?.Id
-                   ?? 0;
+
+            var foundUser = Db.Users.FirstOrDefault(
+                user => user.Login == userData.Login && user.Password == Utils.HashProvider.Get(userData.Password));
+
+            return foundUser?.Id ?? 0;
         }
 
         /// <summary>
@@ -74,12 +73,27 @@ namespace WebApiServer.Controllers
         [HttpPut]
         public int Register([FromBody]UserModel userData)
         {
-            if (Users.UserExists(userData))
+            if (!ModelState.IsValid)
+            {
+                System.Console.WriteLine("Model isn't valid! Errors:");
+                System.Console.WriteLine(string.Join("; ", ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage)));
+            }
+            else
+            {
+                System.Console.WriteLine("Model is valid!");
+            }
+
+            var foundUser = Db.Users.FirstOrDefault(user => user.Login == userData.Login);
+            if (foundUser != null)
             {
                 return 0;
             }
 
-            return Users.Add(userData).Id;
+            userData.Password = Utils.HashProvider.Get(userData.Password);
+            var newUser = Db.Users.Add(userData).Entity;
+            Db.SaveChanges();
+
+            return newUser?.Id ?? 0;
         }
     }
 }
