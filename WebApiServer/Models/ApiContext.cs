@@ -24,5 +24,10 @@ namespace WebApiServer.Models
         /// Gets or sets the users.
         /// </summary>
         public DbSet<UserModel> Users { get; set; }
+
+        /// <summary>
+        /// Gets or sets the users tokens.
+        /// </summary>
+        public DbSet<UserTokenModel> UsersTokens { get; set; }
     }
 }
