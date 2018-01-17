@@ -63,6 +63,30 @@ namespace WebApiServer.Controllers
         }
 
         /// <summary>
+        /// The check token.
+        /// </summary>
+        /// <param name="tokenData">
+        /// The token data.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [HttpPatch]
+        public ActionResult CheckToken([FromBody]UserTokenModel tokenData)
+        {
+            var userTokenData = Db.UsersTokens.FirstOrDefault(userToken => userToken.Token == tokenData.Token);
+            if (userTokenData == null)
+            {
+                return Json(new { Status = 0 });
+            }
+
+            var timestamp = (int)(System.DateTime.UtcNow - new System.DateTime(1970, 1, 1)).TotalSeconds;
+            userTokenData.CreatedAt = timestamp;
+            Db.SaveChanges();
+            return Json(new { Status = 1 });
+        }
+
+        /// <summary>
         /// The register.
         /// </summary>
         /// <param name="userData">
