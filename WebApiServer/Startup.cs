@@ -47,7 +47,7 @@ namespace WebApiServer
         /// </param>
         public void ConfigureServices(IServiceCollection services)
         {
-            string connection = Configuration.GetConnectionString("DefaultConnection");
+            var connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<Models.ApiContext>(options => options.UseSqlServer(connection));
             services.AddMvc();
         }
@@ -64,6 +64,18 @@ namespace WebApiServer
         // ReSharper disable once UnusedMember.Global
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.Use(async (context, next) => {
+                await next();
+                
+                if (context.Response.StatusCode == 404
+                    && !System.IO.Path.HasExtension(context.Request.Path.Value)
+                    && !context.Request.Path.Value.StartsWith("/api/"))
+                {
+                    context.Request.Path = "/index.html";
+                    await next();
+                }
+            });
+            
             app.UseDefaultFiles();
             app.UseStaticFiles();
             
