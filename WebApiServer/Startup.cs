@@ -47,6 +47,12 @@ namespace WebApiServer
         /// </param>
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+            {
+                builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+            }));
             var connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<Models.ApiContext>(options => options.UseSqlServer(connection));
             services.AddMvc();
@@ -64,6 +70,7 @@ namespace WebApiServer
         // ReSharper disable once UnusedMember.Global
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseCors("MyPolicy");
             app.Use(async (context, next) => {
                 await next();
                 

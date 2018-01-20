@@ -61,7 +61,7 @@ namespace WebApiServer
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
 #if !DEBUG
-                .UseUrls("http://0.0.0.0:80")
+                .UseUrls("http://0.0.0.0:5001")
 #endif
                 .Build();
     }
