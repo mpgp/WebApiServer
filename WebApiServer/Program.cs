@@ -12,6 +12,7 @@ namespace WebApiServer
     using System;
     using Microsoft.AspNetCore;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
 
@@ -20,6 +21,21 @@ namespace WebApiServer
     /// </summary>
     public class Program
     {
+        public static IConfiguration Configuration { get; }
+
+        static Program()
+        {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(System.IO.Directory.GetCurrentDirectory())
+#if DEBUG
+                .AddJsonFile("appsettings.Development.json");
+#else
+                .AddJsonFile("appsettings.json");
+#endif
+
+            Configuration = builder.Build();
+        }
+        
         /// <summary>
         /// The main.
         /// </summary>
@@ -60,9 +76,7 @@ namespace WebApiServer
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
-#if !DEBUG
-                .UseUrls("http://0.0.0.0:5001")
-#endif
+                .UseUrls(Configuration["Params:HostUrl"])
                 .Build();
     }
 }
