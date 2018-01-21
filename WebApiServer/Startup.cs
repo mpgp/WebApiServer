@@ -14,6 +14,7 @@ namespace WebApiServer
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using System.Linq;
 
     /// <summary>
     /// The startup.
@@ -47,6 +48,7 @@ namespace WebApiServer
         /// </param>
         public void ConfigureServices(IServiceCollection services)
         {
+            // TODO: Configure Policy
             services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
             {
                 builder.AllowAnyOrigin()
@@ -74,12 +76,17 @@ namespace WebApiServer
             app.Use(async (context, next) => {
                 await next();
                 
-                if (context.Response.StatusCode == 404
-                    && !System.IO.Path.HasExtension(context.Request.Path.Value)
-                    && !context.Request.Path.Value.StartsWith("/api/"))
+                if (context.Response.StatusCode == 404)
                 {
-                    context.Request.Path = "/index.html";
-                    await next();
+                    if (IsFrontEndRoute(context.Request.Path.Value))
+                    {
+                        context.Request.Path = "/index.html";
+                        await next();
+                    }
+                    else
+                    {
+                        context.Response.Redirect("/");
+                    }
                 }
             });
             
@@ -92,6 +99,23 @@ namespace WebApiServer
             }
 
             app.UseMvc();
+        }
+        
+        private bool IsFrontEndRoute(string route)
+        {
+            return RouteIsAbsolute(route) || RouteIsRelative(route);
+        }
+        
+        private bool RouteIsAbsolute(string route)
+        {
+            return Configuration.GetSection("Params:FrontEndRoutes:Absolute").GetChildren()
+                       .FirstOrDefault(absoluteRoute => route == absoluteRoute.Value) != null;
+        }
+        
+        private bool RouteIsRelative(string route)
+        {
+            return Configuration.GetSection("Params:FrontEndRoutes:Relative").GetChildren()
+                       .FirstOrDefault(absoluteRoute => route.StartsWith(absoluteRoute.Value)) != null;
         }
     }
 }

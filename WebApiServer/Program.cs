@@ -9,7 +9,6 @@
 
 namespace WebApiServer
 {
-    using System;
     using Microsoft.AspNetCore;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
@@ -54,7 +53,7 @@ namespace WebApiServer
                     var context = services.GetRequiredService<Models.ApiContext>();
                     Seeds.InitialUsersSeeder.Initialize(context);
                 }
-                catch (Exception ex)
+                catch (System.Exception ex)
                 {
                     var logger = services.GetRequiredService<ILogger<Program>>();
                     logger.LogError(ex, "An error occurred while seeding the database.");
