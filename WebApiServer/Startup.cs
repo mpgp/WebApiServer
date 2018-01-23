@@ -15,6 +15,7 @@ namespace WebApiServer
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using System.Linq;
+    using Utils;
 
     /// <summary>
     /// The startup.
@@ -57,6 +58,7 @@ namespace WebApiServer
             }));
             var connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<Models.ApiContext>(options => options.UseSqlServer(connection));
+            services.Configure<WebSocketServerOptions>(Configuration.GetSection("Params"));
             services.AddMvc();
         }
 
