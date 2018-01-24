@@ -23,10 +23,11 @@ namespace WebApiServer.Controllers
             return Json(WebSocketServers);
         }
         
-        [HttpPost]
-        public ActionResult GetServer([FromBody] WebSocketServer serverData)
+        [Route("{code}")]
+        [HttpGet]
+        public ActionResult GetServer(string code)
         {
-            return Json(WebSocketServers.FirstOrDefault(server => server.Code == serverData.Code));
+            return Json(WebSocketServers.FirstOrDefault(server => server.Code == code));
         }
     }
 }
