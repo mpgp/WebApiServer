@@ -4,6 +4,7 @@ namespace WebApiServer.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Options;
+    using Models;
     using Utils;
 
     /// <inheritdoc />
@@ -20,14 +21,14 @@ namespace WebApiServer.Controllers
         [HttpGet]
         public ActionResult GetServers()
         {
-            return Json(WebSocketServers);
+            return Json(new { data = WebSocketServers});
         }
         
         [Route("{code}")]
         [HttpGet]
         public ActionResult GetServer(string code)
         {
-            return Json(WebSocketServers.FirstOrDefault(server => server.Code == code));
+            return Json(new {data = WebSocketServers.FirstOrDefault(server => server.Code == code)});
         }
     }
 }

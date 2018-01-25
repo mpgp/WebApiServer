@@ -65,18 +65,18 @@ namespace WebApiServer.Models
         /// <summary>
         /// Gets or sets the login.
         /// </summary>
-        [Required(ErrorMessage = "Login is required")]
-        [MinLength(3, ErrorMessage = "Login must be a minimum of 3 characters")]
-        [MaxLength(12, ErrorMessage = "Login must be a maximum of 12 characters")]
-        [RegularExpression(@"^[a-zA-Z0-9]+$", ErrorMessage = "the username can consist only of letters and numbers")]
+        [Required(ErrorMessage = "LOGIN.REQUIRED")]
+        [MinLength(3, ErrorMessage = "LOGIN.MIN_LENGTH")]
+        [MaxLength(12, ErrorMessage = "LOGIN.MAX_LENGTH")]
+        [RegularExpression(@"^[a-zA-Z0-9]+$", ErrorMessage = "LOGIN.REGEX")]
         public string Login { get; set; }
 
         /// <summary>
         /// Gets or sets the password.
         /// </summary>
-        [Required(ErrorMessage = "Password is required")]
-        [MinLength(8, ErrorMessage = "Password must be a minimum of 8 characters")]
-        [MaxLength(249, ErrorMessage = "Password is too long")]
+        [Required(ErrorMessage = "PASSWORD.REQUIRED")]
+        [MinLength(8, ErrorMessage = "PASSWORD.MIN_LENGTH")]
+        [MaxLength(249, ErrorMessage = "PASSWORD.MAX_LENGTH")]
         public string Password { get; set; }
     }
 }

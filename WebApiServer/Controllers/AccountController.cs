@@ -55,8 +55,7 @@ namespace WebApiServer.Controllers
 
             if (foundUser == null)
             {
-                return Json(
-                    new { Errors = new[] { new { Code = "NOT_FOUND", Message = "Incorrect login or password" } } });
+                return Json(new { Errors = new[] { "LOGIN.NOT_FOUND" }});
             }
 
             return Json(new { AuthToken = GetAuthToken(foundUser) });
@@ -106,8 +105,7 @@ namespace WebApiServer.Controllers
             var foundUser = Db.Users.FirstOrDefault(user => user.Login == userData.Login);
             if (foundUser != null)
             {
-                return Json(
-                    new { Errors = new[] { new { Code = "ALREADY_EXISTS", Message = "Login already exists" } } });
+                return Json(new { Errors = new[] { "LOGIN.ALREADY_EXISTS" }});
             }
 
             userData.Password = Utils.HashProvider.Get(userData.Password);
@@ -157,17 +155,9 @@ namespace WebApiServer.Controllers
             return Json(
                 new
                 {
-                    Errors = new[]
-                                     {
-                                         new
-                                             {
-                                                 Code = "INVALID_MODEL",
-                                                 Message = string.Join(
-                                                     "; ",
-                                                     ModelState.Values.SelectMany(x => x.Errors)
-                                                         .Select(x => x.ErrorMessage))
-                                             }
-                                     }
+                    Errors = ModelState.Values.SelectMany(x => x.Errors)
+                        .Select(x => x.ErrorMessage)
+                        .ToArray()
                 });
         }
     }

@@ -1,4 +1,4 @@
-﻿namespace WebApiServer.Utils
+﻿namespace WebApiServer.Models
 {
     public class WebSocketServer
     {
@@ -6,10 +6,5 @@
         public string Address { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
-    }
-    
-    public class WebSocketServerOptions
-    {        
-        public WebSocketServer[] WebSocketServer { get; set; }
     }
 }
