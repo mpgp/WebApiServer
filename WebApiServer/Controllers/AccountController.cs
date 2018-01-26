@@ -15,7 +15,7 @@ namespace WebApiServer.Controllers
 
     /// <inheritdoc />
     [Route("api/[controller]")]
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="AccountController"/> class.
@@ -55,10 +55,10 @@ namespace WebApiServer.Controllers
 
             if (foundUser == null)
             {
-                return Json(new { Errors = new[] { Errors.IncorrectLoginOrPassword }});
+                return GetProcessingErrors(new[] { Errors.IncorrectLoginOrPassword });
             }
 
-            return Json(new { AuthToken = GetAuthToken(foundUser) });
+            return GetResponseData(new {Token = GetAuthToken(foundUser)});
         }
 
         /// <summary>
@@ -76,13 +76,13 @@ namespace WebApiServer.Controllers
             var userTokenData = Db.UsersTokens.FirstOrDefault(userToken => userToken.Token == tokenData.Token);
             if (userTokenData == null)
             {
-                return Json(new { Status = 0 });
+                return GetResponseData(new { Status = 0 });
             }
 
             var timestamp = (int)(System.DateTime.UtcNow - new System.DateTime(1970, 1, 1)).TotalSeconds;
             userTokenData.CreatedAt = timestamp;
             Db.SaveChanges();
-            return Json(new { Status = 1 });
+            return GetResponseData(new { Status = 1 });
         }
 
         /// <summary>
@@ -105,14 +105,14 @@ namespace WebApiServer.Controllers
             var foundUser = Db.Users.FirstOrDefault(user => user.Login == userData.Login);
             if (foundUser != null)
             {
-                return Json(new { Errors = new[] { Errors.LoginAlreadyExists }});
+                return GetProcessingErrors( new[] { Errors.LoginAlreadyExists });
             }
 
             userData.Password = Utils.HashProvider.Get(userData.Password);
             var newUser = Db.Users.Add(userData).Entity;
             Db.SaveChanges();
 
-            return Json(new { AuthToken = GetAuthToken(newUser) });
+            return GetResponseData(new { Token = GetAuthToken(newUser) });
         }
 
         /// <summary>
@@ -142,23 +142,6 @@ namespace WebApiServer.Controllers
             Db.SaveChanges();
 
             return userTokenData.Token;
-        }
-
-        /// <summary>
-        /// The get validation errors.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
-        private ActionResult GetValidationErrors()
-        {
-            return Json(
-                new
-                {
-                    Errors = ModelState.Values.SelectMany(x => x.Errors)
-                        .Select(x => x.ErrorMessage)
-                        .ToArray()
-                });
         }
         
         private static class Errors

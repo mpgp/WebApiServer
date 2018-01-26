@@ -9,7 +9,7 @@ namespace WebApiServer.Controllers
 
     /// <inheritdoc />
     [Route("api/[controller]")]
-    public class ServerController : Controller
+    public class ServerController : BaseController
     {
         public ServerController(IOptions<WebSocketServerOptions> webSocketServerOptions)
         {
@@ -21,14 +21,14 @@ namespace WebApiServer.Controllers
         [HttpGet]
         public ActionResult GetServers()
         {
-            return Json(new { data = WebSocketServers});
+            return GetResponseData(WebSocketServers);
         }
         
         [Route("{code}")]
         [HttpGet]
         public ActionResult GetServer(string code)
         {
-            return Json(new {data = WebSocketServers.FirstOrDefault(server => server.Code == code)});
+            return GetResponseData(WebSocketServers.FirstOrDefault(server => server.Code == code));
         }
     }
 }
