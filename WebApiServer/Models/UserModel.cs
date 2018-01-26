@@ -65,18 +65,29 @@ namespace WebApiServer.Models
         /// <summary>
         /// Gets or sets the login.
         /// </summary>
-        [Required(ErrorMessage = "LOGIN.REQUIRED")]
-        [MinLength(3, ErrorMessage = "LOGIN.MIN_LENGTH")]
-        [MaxLength(12, ErrorMessage = "LOGIN.MAX_LENGTH")]
-        [RegularExpression(@"^[a-zA-Z0-9]+$", ErrorMessage = "LOGIN.REGEX")]
+        [Required(ErrorMessage = Errors.LoginRequired)]
+        [MinLength(3, ErrorMessage = Errors.LoginMinLength)]
+        [MaxLength(12, ErrorMessage = Errors.LoginMaxLength)]
+        [RegularExpression(@"^[a-zA-Z0-9]+$", ErrorMessage = Errors.LoginRegex)]
         public string Login { get; set; }
 
         /// <summary>
         /// Gets or sets the password.
         /// </summary>
-        [Required(ErrorMessage = "PASSWORD.REQUIRED")]
-        [MinLength(8, ErrorMessage = "PASSWORD.MIN_LENGTH")]
-        [MaxLength(249, ErrorMessage = "PASSWORD.MAX_LENGTH")]
+        [Required(ErrorMessage = Errors.PasswordRequired)]
+        [MinLength(8, ErrorMessage = Errors.PasswordMinLength)]
+        [MaxLength(249, ErrorMessage = Errors.PasswordMaxLength)]
         public string Password { get; set; }
+        
+        private static class Errors
+        {
+            public const string LoginRequired = "1",
+                LoginMinLength = "2",
+                LoginMaxLength = "3",
+                LoginRegex = "4",
+                PasswordRequired = "5",
+                PasswordMinLength = "6",
+                PasswordMaxLength = "7";
+        }
     }
 }

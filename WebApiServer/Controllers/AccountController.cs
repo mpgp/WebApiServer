@@ -55,7 +55,7 @@ namespace WebApiServer.Controllers
 
             if (foundUser == null)
             {
-                return Json(new { Errors = new[] { "LOGIN.NOT_FOUND" }});
+                return Json(new { Errors = new[] { Errors.IncorrectLoginOrPassword }});
             }
 
             return Json(new { AuthToken = GetAuthToken(foundUser) });
@@ -105,7 +105,7 @@ namespace WebApiServer.Controllers
             var foundUser = Db.Users.FirstOrDefault(user => user.Login == userData.Login);
             if (foundUser != null)
             {
-                return Json(new { Errors = new[] { "LOGIN.ALREADY_EXISTS" }});
+                return Json(new { Errors = new[] { Errors.LoginAlreadyExists }});
             }
 
             userData.Password = Utils.HashProvider.Get(userData.Password);
@@ -159,6 +159,12 @@ namespace WebApiServer.Controllers
                         .Select(x => x.ErrorMessage)
                         .ToArray()
                 });
+        }
+        
+        private static class Errors
+        {
+            public const string LoginAlreadyExists = "1000",
+                IncorrectLoginOrPassword = "1001";
         }
     }
 }
