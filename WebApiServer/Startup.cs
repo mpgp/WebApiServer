@@ -9,8 +9,11 @@
 
 namespace WebApiServer
 {
+    using System.Net;
     using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Diagnostics;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -86,7 +89,8 @@ namespace WebApiServer
                     }
                     else
                     {
-                        context.Response.Redirect("/");
+                        context.Response.ContentType = "text/html";
+                        await context.Response.SendFileAsync("wwwroot/errors/404.html");
                     }
                 }
             });
@@ -97,6 +101,25 @@ namespace WebApiServer
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseExceptionHandler(
+                    options =>
+                    {
+                        options.Run(
+                            async context =>
+                            {
+                                context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
+                                context.Response.ContentType = "text/html";
+                                var ex = context.Features.Get<IExceptionHandlerFeature>();
+                                if (ex != null)
+                                {
+                                    await context.Response.SendFileAsync("wwwroot/errors/500.html");
+                                }
+                            });
+                    }
+                );
             }
 
             app.UseMvc();
