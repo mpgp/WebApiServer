@@ -20,8 +20,9 @@ namespace WebApiServer
     /// </summary>
     public class Program
     {
-        public static IConfiguration Configuration { get; }
-
+        /// <summary>
+        /// Initializes static members of the <see cref="Program"/> class.
+        /// </summary>
         static Program()
         {
             var builder = new ConfigurationBuilder()
@@ -34,7 +35,12 @@ namespace WebApiServer
 
             Configuration = builder.Build();
         }
-        
+
+        /// <summary>
+        /// Gets the configuration.
+        /// </summary>
+        public static IConfiguration Configuration { get; }
+
         /// <summary>
         /// The main.
         /// </summary>

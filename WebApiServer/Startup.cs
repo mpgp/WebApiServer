@@ -9,6 +9,7 @@
 
 namespace WebApiServer
 {
+    using System.Linq;
     using System.Net;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Diagnostics;
@@ -17,7 +18,6 @@ namespace WebApiServer
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-    using System.Linq;
 
     /// <summary>
     /// The startup.
@@ -52,11 +52,15 @@ namespace WebApiServer
         public void ConfigureServices(IServiceCollection services)
         {
             // TODO: Configure Policy
-            services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
-            {
-                builder.AllowAnyOrigin()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader();
+            // ReSharper disable once StyleCop.SA1115
+            services.AddCors(
+                o => o.AddPolicy(
+                    "MyPolicy",
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin()
+                            .AllowAnyMethod()
+                            .AllowAnyHeader();
             }));
             var connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<Models.ApiContext>(options => options.UseSqlServer(connection));
@@ -77,7 +81,8 @@ namespace WebApiServer
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.UseCors("MyPolicy");
-            app.Use(async (context, next) => {
+            app.Use(async (context, next) =>
+            {
                 await next();
                 
                 if (context.Response.StatusCode == 404)
@@ -110,7 +115,7 @@ namespace WebApiServer
                         options.Run(
                             async context =>
                             {
-                                context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
+                                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                                 context.Response.ContentType = "text/html";
                                 var ex = context.Features.Get<IExceptionHandlerFeature>();
                                 if (ex != null)
@@ -118,24 +123,50 @@ namespace WebApiServer
                                     await context.Response.SendFileAsync("wwwroot/errors/500.html");
                                 }
                             });
-                    }
-                );
+                });
             }
 
             app.UseMvc();
         }
-        
+
+        /// <summary>
+        /// The is front end route.
+        /// </summary>
+        /// <param name="route">
+        /// The route.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
         private bool IsFrontEndRoute(string route)
         {
             return RouteIsAbsolute(route) || RouteIsRelative(route);
         }
-        
+
+        /// <summary>
+        /// The route is absolute.
+        /// </summary>
+        /// <param name="route">
+        /// The route.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
         private bool RouteIsAbsolute(string route)
         {
             return Configuration.GetSection("Params:FrontEndRoutes:Absolute").GetChildren()
                        .FirstOrDefault(absoluteRoute => route == absoluteRoute.Value) != null;
         }
-        
+
+        /// <summary>
+        /// The route is relative.
+        /// </summary>
+        /// <param name="route">
+        /// The route.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
         private bool RouteIsRelative(string route)
         {
             return Configuration.GetSection("Params:FrontEndRoutes:Relative").GetChildren()

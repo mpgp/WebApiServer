@@ -7,16 +7,16 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-
 namespace WebApiServer
 {
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Design;
-    using Microsoft.EntityFrameworkCore.Infrastructure;
     using Microsoft.Extensions.Configuration;
-    
+
+    /// <inheritdoc />
     public class ApiContextFactory : IDesignTimeDbContextFactory<Models.ApiContext>
     {
+        /// <inheritdoc />
         public Models.ApiContext CreateDbContext(string[] args)
         {
             IConfigurationRoot configuration = new ConfigurationBuilder()

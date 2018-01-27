@@ -78,9 +78,15 @@ namespace WebApiServer.Models
         [MinLength(8, ErrorMessage = Errors.PasswordMinLength)]
         [MaxLength(249, ErrorMessage = Errors.PasswordMaxLength)]
         public string Password { get; set; }
-        
+
+        /// <summary>
+        /// The errors.
+        /// </summary>
         private static class Errors
         {
+            /// <summary>
+            /// The error codes.
+            /// </summary>
             public const string LoginRequired = "1",
                 LoginMinLength = "2",
                 LoginMaxLength = "3",

@@ -58,7 +58,7 @@ namespace WebApiServer.Controllers
                 return GetProcessingErrors(new[] { Errors.IncorrectLoginOrPassword });
             }
 
-            return GetResponseData(new {Token = GetAuthToken(foundUser)});
+            return GetResponseData(new { Token = GetAuthToken(foundUser) });
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace WebApiServer.Controllers
             var foundUser = Db.Users.FirstOrDefault(user => user.Login == userData.Login);
             if (foundUser != null)
             {
-                return GetProcessingErrors( new[] { Errors.LoginAlreadyExists });
+                return GetProcessingErrors(new[] { Errors.LoginAlreadyExists });
             }
 
             userData.Password = Utils.HashProvider.Get(userData.Password);
@@ -143,9 +143,15 @@ namespace WebApiServer.Controllers
 
             return userTokenData.Token;
         }
-        
+
+        /// <summary>
+        /// The errors.
+        /// </summary>
         private static class Errors
         {
+            /// <summary>
+            /// The error codes.
+            /// </summary>
             public const string LoginAlreadyExists = "1000",
                 IncorrectLoginOrPassword = "1001";
         }
