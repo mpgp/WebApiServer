@@ -1,5 +1,12 @@
 css/
 js/
+vendor/
+assets/
+vendors/
+static/
 images/
 favicon.ico
 index.html
+asset-manifest.json
+manifest.json
+service-worker.js
