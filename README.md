@@ -1,8 +1,10 @@
 # WebApiServer
 ## Install
-- [.NET Core for Linux](https://www.microsoft.com/net/learn/get-started/linuxubuntu)
-- [.NET Core for macOs](https://www.microsoft.com/net/learn/get-started/macos)
-- [.NET Core for Windows](https://www.microsoft.com/net/learn/get-started/windows)
+- [PostgreSQL](https://www.postgresql.org/download/)
+- .NET Core
+  - [for Linux](https://www.microsoft.com/net/learn/get-started/linuxubuntu)
+  - [for macOs](https://www.microsoft.com/net/learn/get-started/macos)
+  - [for Windows](https://www.microsoft.com/net/learn/get-started/windows)
 
 ## Build
 ```bash
@@ -11,6 +13,7 @@ dotnet build WebApiServer.csproj -c Release
 ```
 ## Configure
 ```bash
+dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL
 dotnet restore
 dotnet ef database update
 ```
@@ -22,3 +25,4 @@ dotnet WebApiServer.dll
 ```
 ## Wiki
 For more information, please visit our [wiki](https://github.com/mpgp/WebApiServer/wiki).
+

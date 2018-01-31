@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+#define USE_POSTGRES
+
 namespace WebApiServer
 {
     using System.Linq;
@@ -63,7 +65,11 @@ namespace WebApiServer
                             .AllowAnyHeader();
             }));
             var connection = Configuration.GetConnectionString("DefaultConnection");
+#if USE_POSTGRES
+            services.AddEntityFrameworkNpgsql().AddDbContext<Models.ApiContext>(options => options.UseNpgsql(connection));
+#else
             services.AddDbContext<Models.ApiContext>(options => options.UseSqlServer(connection));
+#endif
             services.Configure<Utils.WebSocketServerOptions>(Configuration.GetSection("Params"));
             services.AddMvc();
         }
