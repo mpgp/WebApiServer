@@ -28,8 +28,8 @@ namespace WebApiServer.Seeds
             if (!context.Users.Any())
             {
                 context.Users.AddRange(
-                    new UserModel("system", "041bdee79a796bfc6778be35478e1448"),
-                    new UserModel("admin", "9596df50d7e110a71ad2f53d21ff3228"));
+                    new UserModel(1, "system", "041bdee79a796bfc6778be35478e1448"),
+                    new UserModel(2, "admin", "9596df50d7e110a71ad2f53d21ff3228"));
                 context.SaveChanges();
             }
         }
