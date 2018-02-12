@@ -7,8 +7,6 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-#define USE_POSTGRES
-
 namespace WebApiServer
 {
     using Microsoft.EntityFrameworkCore;
@@ -27,7 +25,7 @@ namespace WebApiServer
                 .Build();
             var builder = new DbContextOptionsBuilder<Models.ApiContext>();
             var connectionString = configuration.GetConnectionString("DefaultConnection");
-#if USE_POSTGRES
+#if !DEBUG
             builder.UseNpgsql(connectionString);
 #else
             builder.UseSqlServer(connectionString);

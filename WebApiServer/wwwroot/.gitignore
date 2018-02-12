@@ -4,7 +4,6 @@ vendor/
 assets/
 vendors/
 static/
-images/
 favicon.ico
 index.html
 asset-manifest.json
