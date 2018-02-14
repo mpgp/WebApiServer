@@ -1,6 +1,8 @@
 # WebApiServer
 ## Install
-- [PostgreSQL](https://www.postgresql.org/download/)
+- DataBase Management System
+  - [SQL Server](https://www.microsoft.com/en-us/sql-server/sql-server-downloads)
+  - [PostgreSQL](https://www.postgresql.org/download/)
 - .NET Core
   - [for Linux](https://www.microsoft.com/net/learn/get-started/linuxubuntu)
   - [for macOs](https://www.microsoft.com/net/learn/get-started/macos)
@@ -10,16 +12,17 @@
 ```bash
 cp ./appsettings.default.json ./appsettings.json
 dotnet build WebApiServer.csproj -c Release
+
+ln -s $(pwd)/appsettings.json $(pwd)/bin/Release/netcoreapp2.0/appsettings.json
+ln -s $(pwd)/wwwroot $(pwd)/bin/Release/netcoreapp2.0/wwwroot
 ```
 ## Configure
 ```bash
-dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL
 dotnet restore
 dotnet ef database update
 ```
 ## Startup
 ```bash
-cp ./appsettings.json ./bin/Release/netcoreapp2.0/
 cd ./bin/Release/netcoreapp2.0/
 dotnet WebApiServer.dll
 ```
