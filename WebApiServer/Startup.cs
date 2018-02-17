@@ -52,7 +52,6 @@ namespace WebApiServer
         public void ConfigureServices(IServiceCollection services)
         {
             // TODO: Configure Policy
-            // ReSharper disable once StyleCop.SA1115
             services.AddCors(
                 o => o.AddPolicy(
                     "MyPolicy",
@@ -62,13 +61,19 @@ namespace WebApiServer
                             .AllowAnyMethod()
                             .AllowAnyHeader();
             }));
-            var connection = Configuration.GetConnectionString("DefaultConnection");
-#if !DEBUG
-            services.AddEntityFrameworkNpgsql().AddDbContext<Models.ApiContext>(options => options.UseNpgsql(connection));
-#else
-            services.AddDbContext<Models.ApiContext>(options => options.UseSqlServer(connection));
-#endif
             services.Configure<Utils.WebSocketServerOptions>(Configuration.GetSection("Params"));
+            
+            var connectionType = Configuration.GetValue<string>("Params:ConnectionType");
+            var connectionString = Configuration.GetConnectionString(connectionType);
+            if (connectionType == "psql")
+            {
+                services.AddEntityFrameworkNpgsql()
+                    .AddDbContext<Models.ApiContext>(options => options.UseNpgsql(connectionString));
+            }
+            else
+            {
+                services.AddDbContext<Models.ApiContext>(options => options.UseSqlServer(connectionString));   
+            }
             services.AddMvc();
         }
 

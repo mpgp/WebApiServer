@@ -24,12 +24,18 @@ namespace WebApiServer
                 .AddJsonFile("appsettings.json")
                 .Build();
             var builder = new DbContextOptionsBuilder<Models.ApiContext>();
-            var connectionString = configuration.GetConnectionString("DefaultConnection");
-#if !DEBUG
-            builder.UseNpgsql(connectionString);
-#else
-            builder.UseSqlServer(connectionString);
-#endif
+            var connectionType = configuration.GetValue<string>("Params:ConnectionType");
+            var connectionString = configuration.GetConnectionString(connectionType);
+
+            if (connectionType == "psql")
+            {
+                builder.UseNpgsql(connectionString);
+            }
+            else
+            {
+                builder.UseSqlServer(connectionString);
+            }
+
             return new Models.ApiContext(builder.Options);
         }
     }
